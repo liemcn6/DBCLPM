@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="common/shared :: common-header" />
+<body>
+	<div th:replace="common/shared :: navbar" />
+
+	<div class="container" style="height: 500px;">
+		<div class="row" style="margin-top: 60px;">
+			<div class="col-sm-9 offset-md-3">
+
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs">
+
+					<li class="nav-item" id="tab2"><a
+						th:classappend="${classActiveLogin} ? 'active'" class="nav-link"
+						href="#tab-2" data-toggle="tab"><span style="color: red;">Đăng
+								nhập</span></a></li>
+					<li class="nav-item" id="tab3"><a
+						th:classappend="${classActiveForgetPassword} ? 'active'"
+						class="nav-link" href="#tab-3" data-toggle="tab"><span
+							style="color: red;">Quên mật khẩu</span></a></li>
+				</ul>
+
+				<!-- Tab panes -->
+				<div class="tab-content">
+
+					<!-- Login panel -->
+					<div class="tab-pane fade" id="tab-2"
+						th:classappend="${classActiveLogin} ? 'show active'">
+						<div class="card">
+							<div style="border: none;">
+								<div class="card-body"
+									style="background-color: #ededed; margin-top: 20px;">
+
+									<div class="alert alert-danger text-center" role="alert"
+										th:if="${param.error}">Tên tài khoản hoặc mật khẩu không
+										đúng.</div>
+
+									<div class="alert alert-success text-center" role="alert"
+										th:if="${param.logout}">Bạn đã đăng xuất.</div>
+
+									<form th:action="@{/login}" method="post">
+										<div class="form-group">
+											<label for="username">Tên tài khoản <span
+												style="color: red;">*</span></label> <input required="required"
+												type="text" class="form-control"
+												placeholder="Nhập tên tài khoản" id="username"
+												name="username">
+										</div>
+
+										<div class="form-group">
+											<label for="password">Mật khẩu <span
+												style="color: red;">*</span></label> <input
+												placeholder="Nhập mật khẩu" required="required"
+												type="password" class="form-control" id="password"
+												name="password">
+										</div>
+
+										<div class="form-group">
+											<label for="remember-me">Nhớ tài khoản</label> <input
+												type="checkbox" name="remember-me" />
+										</div>
+
+										<button type="submit" class="btn btn-primary">Đăng
+											nhập</button>
+									</form>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					<!-- Forget password panel -->
+					<div class="tab-pane fade" id="tab-3"
+						th:classappend="${classActiveForgetPassword} ? 'show active'">
+						<div class="card">
+							<div style="border: none;">
+								<div class="card-body"
+									style="background-color: #ededed; margin-top: 20px;">
+
+									<div th:if="${emailNotExists}" class="alert alert-danger">Địa
+										chỉ email không tồn tại</div>
+									<div th:if="${forgetPasswordEmailSent}"
+										class="alert alert-success">Đã gửi email.</div>
+
+									<form th:action="@{/forgetPassword}" method="post">
+										<div class="form-group">
+											<label for="recoverEmail">Email của bạn <span
+												style="color: red;">*</span></label> <input required="required"
+												type="email" class="form-control"
+												placeholder="Nhập địa chỉ email đã đăng ký"
+												id="recoverEmail" name="email">
+
+										</div>
+
+										<button type="submit" class="btn btn-primary">Gửi</button>
+									</form>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:replace="common/shared :: footer" />
+	<div th:replace="common/shared :: body-bottom-scripts" />
+
+	<script type="text/javascript">
+		$("#username").focus();
+
+		$('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+			$("#username").focus();
+			$("#recoverEmail").focus();
+		});
+	</script>
+</body>
+</html>

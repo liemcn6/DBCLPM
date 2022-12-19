@@ -1,0 +1,302 @@
+{% extends 'admin.html' %}
+
+{% block body %}
+    <style>
+
+        .modal-dialog {
+            max-width: 1000px !important;
+            margin: 1.75rem auto;
+        }
+    </style>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Starter Page</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Starter Page</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class=" col-sm-12">
+
+                    </div>
+                    <div class="col-sm-12">
+                        <table class="table">
+                            <thead>
+                            <th>Mã</th>
+                            <th>Khách hàng</th>
+                            <th>Số điện thoại</th>
+                            <th>Địa chỉ</th>
+                            <th>ngày đặt hàng</th>
+                            <th>Lời nhắn</th>
+
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                            </thead>
+                            <tbody class="" id="list">
+                            <tr>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content -->
+        </div>
+    </div>
+
+    </div>
+
+    </div>
+    </div>
+
+    {#    modal them#}
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered w-100 p-3" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Chi tiết đơn hàng</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body container">
+                    <div class="row mt-5 ">
+                        <div class="col-sm-12" id="listCart">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer " id="listitemfooter">
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.content-wrapper -->
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous"></script>
+    <script>
+        $("form#formthem").submit(function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            console.log(formData)
+            $.ajax({
+                url: 'http://127.0.0.1:8000/api/book/',
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    alo()
+                    alert('thêm thành công')
+                },
+                error: function () {
+                    alert("thêm sản phẩm thất bại")
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
+
+        //hiên thị
+        $(document).ready(function () {
+            alo()
+        })
+
+        function alo() {
+
+            $.ajax(
+                {
+                    type: "GET",
+                    url: "http://127.0.0.1:8000/api/order/",
+                    success: function (data) {
+                        console.log(data)
+
+                        var html = ""
+                        $.each(data, function (i, index) {
+                                if (index.status == 0) {
+                                    status = "<span class='text-danger'>chờ </span>"
+                                }
+                                if (index.status == 1) {
+                                    status = "<span class='text-warning'>Đang giao</span>"
+                                }
+                                if (index.status == 2) {
+                                    status = "<span class='text-success'>thành công</span>"
+                                }
+
+                                html += "<tr class='align-items-center'>"
+                                html += "<td>" + index.code + "</td>"
+                                html += "<td >" + index.username + "</td>"
+                                html += "<td  >" + index.phone + "</td>"
+                                html += "<td  >" + index.address + "</td>"
+                                html += "<td  >" + index.date + "</td>"
+                                html += "<td  >" + index.content + "</td>"
+                                html += "<td >" + index.total + ' VNĐ' + "</td>"
+                                html += "<td >" + status + "</td>"
+                                html += "<td><a data-id_xoa='" + index.id + "'  class='btn btn-warning del-data'  href='' > Xóa</a>  <a  data-toggle='modal' data-name='" + index.name + "' data-author='" + index.author + "' data-code=" + index.code + " data-quantity='" + index.quantity + "' data-price='" + index.price + "' data-Category='" + index.Category + "' data-publisher='" + index.publisher + "' data-year='" + index.year + "' data-id='" + index.id + "' data-image='" + index.image + "' data-description='" + index.description + "' data-target ='#exampleModalCenter'  class='btn btn-danger  vieworderitem' href=''>Xem</a></td>"
+                                html += "<tr>"
+
+                            }
+                        )
+                        $('#list').html(html)
+
+                    },
+                    error: function () {
+
+                    }
+                }
+            );
+        }
+
+        $(document).on('click', '.del-data', function (event) {
+            event.preventDefault()
+            var id = $(this).data('id_xoa')
+            let that = $(this)
+            $.ajax(
+                {
+                    type: "DELETE",
+                    url: "http://127.0.0.1:8000/api/order/" + id,
+                    data: {id: id},
+                    success: function (data) {
+                        {#alert("Xóa thành công")#}
+                        that.parent().parent().remove()
+                    },
+                    error: function () {
+
+                    }
+                }
+            );
+        })
+        //lay chi tiet
+        $(document).on('click', '.update', function () {
+            var id = $(this).data('id')
+            var year = $(this).data('year')
+            var description = $(this).data('description')
+            var quantity = $(this).data('quantity')
+            var image = $(this).data('image')
+            var Category = $(this).data('category')
+            var publisher = $(this).data('publisher')
+            var price = $(this).data('price')
+            var name = $(this).data('name')
+            var author = $(this).data('author')
+
+            $('#txtname').val(name)
+            $('#txtyear').val(year)
+            $('#txtquantity').val(quantity)
+            $('#txtprice').val(price)
+            $('#txtCategory').val(Category)
+            $('#txtpublisher').val(publisher)
+            $('#txtdescription').val(description)
+            $('#txtimage').attr('src', image)
+            $('#txtid').val(id)
+            $('#txtauthor').val(author)
+
+        })
+        // update
+        $(document).on('click', '.updateCate', function (e) {
+                id = $('#txtid').val()
+                e.preventDefault();
+                const data = new FormData();
+                var name = $('#txtname').val()
+                var price = $('#txtprice').val()
+                var year = $('#txtyear').val()
+                var author = $('#txtauthor').val()
+                var quantity = $('#txtquantity').val()
+                var Category = $('#txtCategory').val()
+                var publisher = $('#txtpublisher').val()
+                var description = $('#txtdescription').val()
+                var image = $('#imagess')[0].files["0"]
+
+
+                data.append('name', name)
+                data.append('quantity', quantity)
+                data.append('Category', Category)
+                data.append('publisher', publisher)
+                data.append('description', description)
+                data.append('year', year)
+                data.append('price', price)
+                data.append('author', author)
+                if ($('#imagess').val() != "") {
+                    data.append('image', image)
+                }
+
+
+            }
+        )
+
+        $(document).on('click', '.vieworderitem', function (e) {
+            e.preventDefault()
+            var code = $(this).data('code')
+            var id = $(this).data('id')
+            $.ajax({
+                type: 'GET',
+                url: "http://127.0.0.1:8000/api/orderitem/?q=" + code,
+                success: function (data) {
+                    var html = ""
+                    var listitemfooter = ""
+                    if (data != "") {
+                        var total = 0
+                        $.each(data, function (i, index) {
+                            total += (index.quantity * index.Product.price)
+                            html += " <div style='min-height: 100px' class='col-sm-12 row border-bottom mt-3 mb-3 '>"
+                            html += "  <div class='col-sm-3'>"
+                            html += "    <img src='" + index.Product.image + "' height='120px' width='100%' style='object-fit: cover'>"
+                            html += "  </div>"
+                            html += "  <div class='col-sm-3'>"
+                            html += "   <p>" + index.Product.name + "</p>"
+                            html += "  </div>"
+                            html += "  <div class='col-sm-2'>"
+                            html += "      <input disabled style='width: 100%;border: none' type='number' id='quan' value='" + index.quantity + "' min='1'>"
+                            html += " </div>"
+                            html += " <div class='col-sm-3'>"
+                            html += "     <p>" + (index.quantity * index.Product.price) + " VNĐ </p>"
+                            html += "  </div>"
+                            html += "  <div class='col-sm-1'>"
+                            html += "   </div>"
+                            html += "  </div>"
+
+                        })
+
+                        listitemfooter += " <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>"
+                        listitemfooter += "<a href='/updategiao/"+id+"'><button type='button' class='btn btn-warning'>Đang giao</button></a>"
+                        listitemfooter += "<a href='/updatetc/" +id + "'><button type='button' class='btn btn-success'>Thành công</button></a>"
+                    } else {
+
+                    }
+                    $('#listitemfooter').html(listitemfooter);
+                    $('#listCart').html(html)
+                    $('#total').html(total.toLocaleString('it-IT', {style: 'currency', currency: 'VND'}))
+
+                },
+                error: function () {
+                }
+            })
+        })
+
+    </script>
+
+{% endblock %}
+

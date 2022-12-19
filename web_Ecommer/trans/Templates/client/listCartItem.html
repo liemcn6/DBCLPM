@@ -1,0 +1,95 @@
+{% extends 'client/base.html' %}
+{% block body %}
+    <div class="container">
+        <h4 class="mt-4">
+            Giỏ hàng của bạn!
+        </h4>
+        <div class="row mt-5 ">
+            <div class="col-sm-8 row ">
+                <div class="row" id="listCart">
+
+                </div>
+            </div>
+
+
+            <div class="col-sm-4 ">
+                <div class="card">
+                    <div class="row m-3 border-bottom">
+                        <div class="col-sm-6"><h5>Tổng tiền: </h5></div>
+                        <div class="col-sm-6"><span id="total"></span></div>
+                    </div>
+                    <div class="text-center m-4">
+                        <button class="btn btn-dark w-100"><a href="/orderAdd/">Order</a></button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            var user ={{ user.id }}
+            var card = localStorage.getItem('idcart')
+            loadCart()
+            function loadCart(){
+                if (user) {
+                $.ajax({
+                    type: 'GET',
+                    url: "http://127.0.0.1:8000/api/cartitem/?q=" + card,
+                    success: function (data) {
+                        var html = ""
+                        if (data != "") {
+                        var total=0
+                             $.each(data, function (i, index) {
+                                 total+=(index.quantity*index.Product.price)
+                                 html += " <div style='min-height: 120px' class='col-sm-12 row border-bottom mt-3 mb-3 '>"
+                                 html += "  <div class='col-sm-3'>"
+                                 html += "    <img src='"+index.Product.image+"' height='120px' width='100%' style='object-fit: cover'>"
+                                 html += "  </div>"
+                                 html += "  <div class='col-sm-3'>"
+                                 html += "   <p>"+index.Product.name+"</p>"
+                                 html += "  </div>"
+                                 html += "  <div class='col-sm-2'>"
+                                 html += "      <input disabled style='width: 100%;border: none' type='number' id='quan' value='"+index.quantity+"' min='1'>"
+                                 html += " </div>"
+                                 html += " <div class='col-sm-3'>"
+                                 html += "     <p>"+(index.quantity*index.Product.price).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})+" </p>"
+                                 html += "  </div>"
+                                 html += "  <div class='col-sm-1'>"
+                                 html += "      <i class='fas fa-trash' data-idcartitem='"+index.id+"' id='btnTrash'></i>"
+                                 html += "   </div>"
+                                 html += "  </div>"
+                             })
+                        }else {
+                            html+="<p class='ml-5'>Giỏ hàng của bạn trống! <i class='fas fa-frown'></i>... </p>"
+                            html+="<p>  Vui lòng quay lại trang chủ để mua sắm </p>"
+                        }
+                        $('#listCart').html(html)
+                        $('#total').html(total.toLocaleString('it-IT', {style : 'currency', currency : 'VND'}))
+
+                    },
+                    error: function () {
+
+                    }
+                })
+            }
+            }
+
+            $(document).on('click','#btnTrash',function (e){
+                e.preventDefault()
+                var id = $(this).data('idcartitem');
+                $.ajax({
+                    type: "DELETE",
+                    url: "http://127.0.0.1:8000/api/cartitem/"+id,
+                    success: function (data){
+                        loadCart()
+                    },
+                    error: function (){
+
+                    }
+                })
+            })
+        })
+    </script>
+{% endblock %}

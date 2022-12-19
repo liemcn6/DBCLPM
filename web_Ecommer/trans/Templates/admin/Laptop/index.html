@@ -1,0 +1,334 @@
+{% extends 'admin.html' %}
+
+{% block body %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Starter Page</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Starter Page</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class=" col-sm-12">
+                        <button data-toggle="modal" data-target="#modalthem"
+                                class="btn btn-success m-2">Thêm
+                        </button>
+                    </div>
+                    <div class="col-sm-12">
+                        <table class="table">
+                            <thead>
+                            <th>ID</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Hình ảnh</th>
+                            <th>Giá</th>
+                            <th>Ram</th>
+                            <th>Cpu</th>
+                            <th>Danh mục</th>
+                            <th>Hãng sản xuất</th>
+                            <th>Thao tác</th>
+                            </thead>
+                            <tbody class="" id="list">
+                            <tr>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content -->
+        </div>
+    </div>
+
+    </div>
+
+    </div>
+    </div>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Cập nhật laptop̉</h4>
+
+                </div>
+                <div class="modal-body">
+                    <form id="formsua" class="row form-group" enctype="multipart/form-data">
+                        <input id="txtid" disabled placeholder="id"
+                               class="col-md-12 m-2 form-control">
+                        <input id="txtname" placeholder="Nhập tên Laptop"
+                               class="col-md-4 m-2 form-control">
+                        <input accept="image/*" id="imagess" type="file" placeholder="Chọn file"
+                               class="col-md-7 m-2 form-control ">
+                        <img class="col-md-4 m-2 " id="txtimage" height='100' width='120' style='object-fit: cover'
+                             src="">
+                        <input id="txtprice" placeholder="Nhập tên giá "
+                               class="col-sm-7 m-2 form-control">
+                        <select id="txtproducer" class="col-md-7 m-2 form-control ">
+                            <option>Chọn Hãng</option>
+                            {% for producer in producer %}
+                                <option value="{{ producer.id }}">{{ producer.name }}</option>
+
+                            {% endfor %}
+                        </select>
+                        <input id="txtcpu" placeholder="Cpu" class="col-sm-4 m-2 form-control">
+                        <select id="txtCategory" class="col-md-7 m-2 form-control ">
+                            <option>Chọn Danh mục</option>
+                            {% for cate in category %}
+                                <option value="{{ cate.id }}">{{ cate.name }}</option>
+
+                            {% endfor %}
+                        </select>
+                        <input id="txtram" placeholder="Ram" class="col-md-4 m-2 form-control ">
+                        <input id="txtquantity" type="number" placeholder="Số lượng"
+                               class="col-md-7 m-2 form-control">
+
+                        <textarea id="txtdescription" rows="3"
+                                  class="col-md-12 m-2 form-control"></textarea>
+                        <button type="submit" data-dismiss="modal" class="updateCate btn btn-success m-2">
+                            Cập nhật
+                        </button>
+
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {#    modal them#}
+    <div id="modalthem" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Thêm Laptop</h4>
+                </div>
+                <div class="modal-body container">
+                    <form id="formthem" class="row form-group" enctype="multipart/form-data">
+                        <input id="name" name="name" placeholder="Nhập tên Laptop" class="col-md-4 m-2 form-control">
+                        <input accept="image/*" id="image" name="image" type="file" placeholder="Chọn file"
+                               class="col-md-7 m-2 form-control ">
+                        <input id="price" name="price" placeholder="Nhập tên giá " class="col-sm-4 m-2 form-control">
+                        <select id="producer" name="producer" class="col-md-7 m-2 form-control ">
+                            <option>Chọn Hãng</option>
+                            {% for pro in producer %}
+                                <option value="{{ pro.id }}">{{ pro.name }}</option>
+
+                            {% endfor %}
+                        </select>
+                        <input name="cpu" id="cpu" placeholder="Cpu" class="col-sm-4 m-2 form-control">
+                        <select name="Category" id="Category" class="col-md-7 m-2 form-control ">
+                            <option>Chọn Danh mục</option>
+                            {% for cate in category %}
+                                <option value="{{ cate.id }}">{{ cate.name }}</option>
+
+                            {% endfor %}
+                        </select>
+                        <input name="ram" id="ram" placeholder="Ram" class="col-md-4 m-2 form-control ">
+                        <input name="quantity" id="quantity" type="number" placeholder="Số lượng"
+                               class="col-md-7 m-2 form-control">
+
+                        <textarea name="description" id="description" rows="3"
+                                  class="col-md-12 m-2 form-control"></textarea>
+
+                    </form>
+                    <button type="submit" form="formthem" class="btn btnthem  btn-success m-2">Thêm
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- /.content-wrapper -->
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous"></script>
+    <script>
+        $("form#formthem").submit(function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            console.log(formData)
+            $.ajax({
+                url: 'http://127.0.0.1:8000/api/laptop/',
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    alo()
+                    alert('Thêm thành công')
+                },
+                error: function () {
+                    alert("Thêm sản phẩm thất bại")
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
+
+        //hiên thị
+        $(document).ready(function () {
+            alo()
+        })
+
+        function alo() {
+
+            $.ajax(
+                {
+                    type: "GET",
+                    url: "http://127.0.0.1:8000/api/laptop/",
+                    success: function (data) {
+                        console.log(data)
+
+                        var html = ""
+                        $.each(data, function (i, index) {
+
+                                html += "<tr class='align-items-center'>"
+                                html += "<td >" + index.id + "</td>"
+                                html += "<td>" + index.name + "</td>"
+                                html += "<td ><img height='100' width='120'  style='object-fit: cover' src='" + index.image + "'></td>"
+                                html += "<td  >" + index.price + ' VNĐ' + "</td>"
+                                html += "<td  >" + index.ram + "</td>"
+                                html += "<td  >" + index.cpu + "</td>"
+                                html += "<td  >" + index.Category+ "</td>"
+                                html += "<td >" + index.producer + "</td>"
+                                html += "<td><a data-id_xoa='" + index.id + "'  class='btn btn-warning del-data'  href='' > Xóa</a>  <a  data-toggle='modal' data-name='" + index.name + "' data-cpu='" + index.cpu + "' data-quantity='" + index.quantity + "' data-price='" + index.price + "' data-Category='" + index.Category + "' data-producer='" + index.producer + "' data-ram='" + index.ram + "' data-id='" + index.id + "' data-image='" + index.image + "' data-description='" + index.description + "' data-target='#myModal'  class='btn btn-danger update' href=''>Cập nhật</a></td>"
+                                html += "<tr>"
+
+                            }
+                        )
+                        $('#list').html(html)
+
+                    },
+                    error: function () {
+
+                    }
+                }
+            );
+        }
+
+        $(document).on('click', '.del-data', function (event) {
+            event.preventDefault()
+            var id = $(this).data('id_xoa')
+            let that = $(this)
+            $.ajax(
+                {
+                    type: "DELETE",
+                    url: "http://127.0.0.1:8000/api/laptop/" + id,
+                    data: {id: id},
+                    success: function (data) {
+                        {#alert("Xóa thành công")#}
+                        that.parent().parent().remove()
+                    },
+                    error: function () {
+
+                    }
+                }
+            );
+        })
+        //lay chi tiet
+        $(document).on('click', '.update', function () {
+            var id = $(this).data('id')
+            var ram = $(this).data('ram')
+            var description = $(this).data('description')
+            var quantity = $(this).data('quantity')
+            var image = $(this).data('image')
+            var Category = $(this).data('category')
+            var producer = $(this).data('producer')
+            var price = $(this).data('price')
+            var name = $(this).data('name')
+            var cpu = $(this).data('cpu')
+
+            $('#txtname').val(name)
+            $('#txtram').val(ram)
+            $('#txtcpu').val(cpu)
+            $('#txtquantity').val(quantity)
+            $('#txtprice').val(price)
+            $('#txtCategory').val(Category)
+            $('#txtproducer').val(producer)
+            $('#txtdescription').val(description)
+            $('#txtimage').attr('src', image)
+            $('#txtid').val(id)
+
+        })
+        // update
+        $(document).on('click', '.updateCate', function (e) {
+            id = $('#txtid').val()
+            e.preventDefault();
+            const data = new FormData();
+            var name=$('#txtname').val()
+            var price=$('#txtprice').val()
+            var ram=$('#txtram').val()
+            var cpu=$('#txtcpu').val()
+            var quantity=$('#txtquantity').val()
+            var Category=$('#txtCategory').val()
+            var producer=$('#txtproducer').val()
+            var description=$('#txtdescription').val()
+            var image =$('#imagess')[0].files["0"]
+            {##}
+            {#  alert(name+price+ram+cpu+quantity+Category+producer+description+image)#}
+
+            data.append('name', name)
+            data.append('quantity', quantity)
+            data.append('ram',ram)
+            data.append('Category', Category)
+            data.append('producer', producer)
+            data.append('description', description)
+            data.append('cpu', cpu)
+            data.append('price', price)
+            if($('#imagess').val()!=""){
+                data.append('image',image)
+            }
+
+
+                        $.ajax({
+                            url: 'http://127.0.0.1:8000/api/laptop/' + parseInt(id),
+                            type: 'PUT',
+                            data: data,
+                            success: function (data) {
+                                alo()
+
+                                alert('Sửa thành công')
+
+                            },
+                            error: function () {
+                                alert("Sửa thất bại")
+                            },
+                            cache: false,
+                            contentType: false,
+                            processData: false
+                        });
+                    }
+                )
+    </script>
+
+{% endblock %}
+

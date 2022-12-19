@@ -1,0 +1,170 @@
+{% extends 'client/base.html' %}
+{% block body %}
+    <div class="container">
+        <h4 class="mt-5">Xác định thông tin đơn hàng của bạn!</h4>
+        <form id="formadd" class="form">
+            <div class="row">
+                <div class="col-sm-6 form-group">
+                    <label>Họ và tên:</label>
+                    <input id="username" class="form-control" type="text" placeholder="Enter name"
+                           value="{{ user.username }}" required/>
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label>Số điện thoại:</label>
+                    <input required id="phone" class="form-control" type="text" placeholder="Enter number phone"/>
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label>Địa chỉ:</label>
+                    <input required id="address" class="form-control" type="text" placeholder="Enter address"/>
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label>Lời nhắn:</label>
+                    <input required id="content" class="form-control" type="text" placeholder="Enter message"/>
+                </div>
+            </div>
+
+        </form>
+        <div class="row mt-5 ">
+            <div class="col-sm-8 row ">
+                <div class="row" id="listCart">
+
+                </div>
+            </div>
+            <div class="col-sm-4 ">
+                <div class="card">
+                    <div class="row m-3 border-bottom">
+                        <div class="col-sm-6"><h5>Tổng tiền: </h5></div>
+                        <div class="col-sm-6"><span id="total"></span></div>
+                    </div>
+                    <div class="text-center m-4">
+                        <button class="btn btn-dark w-100 dathang">Đặt hàng</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            var user =
+            {{ user.id }}
+            var card = localStorage.getItem('idcart')
+            loadCart()
+
+            function loadCart() {
+                if (user) {
+                    $.ajax({
+                        type: 'GET',
+                        url: "http://127.0.0.1:8000/api/cartitem/?q=" + card,
+                        success: function (data) {
+                            var html = ""
+                            if (data != "") {
+                                var total = 0
+                                $.each(data, function (i, index) {
+                                    total += (index.quantity * index.Product.price)
+                                    html += " <div style='min-height: 120px' class='col-sm-12 row border-bottom mt-3 mb-3 '>"
+                                    html += "  <div class='col-sm-3'>"
+                                    html += "    <img src='" + index.Product.image + "' height='120px' width='100%' style='object-fit: cover'>"
+                                    html += "  </div>"
+                                    html += "  <div class='col-sm-3'>"
+                                    html += "   <p>" + index.Product.name + "</p>"
+                                    html += "  </div>"
+                                    html += "  <div class='col-sm-2'>"
+                                    html += "      <input disabled style='width: 100%;border: none' type='number' id='quan' value='" + index.quantity + "' min='1'>"
+                                    html += " </div>"
+                                    html += " <div class='col-sm-3'>"
+                                    html += "     <p>" + (index.quantity * index.Product.price).toLocaleString('it-IT', {
+                                        style: 'currency',
+                                        currency: 'VND'
+                                    }) + " </p>"
+                                    html += "  </div>"
+                                    html += "  <div class='col-sm-1'>"
+                                    html += "   </div>"
+                                    html += "  </div>"
+                                })
+                            }
+                            $('#listCart').html(html)
+                            $('#total').html(total)
+
+                        },
+                        error: function () {
+
+                        }
+                    })
+                }
+            }
+
+            $(document).on('click', '.dathang', function (e) {
+
+                var username = $("#username").val()
+                var phone = $("#phone").val()
+                var address = $("#address").val()
+                var content = $("#content").val()
+                var code = Math.floor(Math.random() * 1000000)
+                var total = $("#total").html();
+                var User =
+                {{ user.id }}
+
+                var d = new Date();
+                let year = d.getFullYear();
+                let month = d.getMonth() + 1;
+                let day = d.getDate();
+                let dayofweek = d.getDay();
+                const dayname = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+                var date = (dayname[dayofweek] + ' ngày ' + day + '/' + month + '/' + year);
+                {#console.log(username + phone + address+content+code+total+User+date)#}
+                $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:8000/api/order/",
+                    data: {
+                        date: date,
+                        User: User,
+                        phone: phone,
+                        address: address,
+                        content: content,
+                        code: code,
+                        total: total,
+                        username: username
+                    },
+                    success: function (datas) {
+                        $.ajax({
+                            type: 'GET',
+                            url: "http://127.0.0.1:8000/api/cartitem/?q=" + card,
+                            success: function (data) {
+
+                                $.each(data, function (i, index) {
+                                    var Prodcuct = index.Product.id
+                                    var quantity = index.quantity
+
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "http://127.0.0.1:8000/api/orderitem/",
+                                        data: {Product: Prodcuct, quantity: quantity, code: code},
+                                        success: function (dat) {
+
+                                        },
+                                        error: function () {
+
+                                        }
+                                    })
+
+
+                                })
+                                window.location = "/deletecart/"
+
+                            },
+                            error: function () {
+
+                            }
+                        })
+                    },
+                    error: function () {
+
+                    }
+
+                })
+
+            })
+        })
+    </script>{% endblock %}

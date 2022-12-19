@@ -1,0 +1,331 @@
+{% extends 'admin.html' %}
+
+{% block body %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Starter Page</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Starter Page</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class=" col-sm-12">
+                        <button data-toggle="modal" data-target="#modalthem"
+                                class="btn btn-success m-2">Thêm
+                        </button>
+                    </div>
+                    <div class="col-sm-12">
+                        <table class="table">
+                            <thead>
+                            <th>ID</th>
+                            <th>Avatar</th>
+                            <th>Username</th>
+                            <th>First_name</th>
+                            <th>Last_name</th>
+                            <th>Email</th>
+                            <th>Thao tác</th>
+                            </thead>
+                            <tbody class="" id="list">
+                            <tr>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content -->
+        </div>
+    </div>
+
+    </div>
+
+    </div>
+    </div>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Cập nhật tác giả</h4>
+
+                </div>
+                <div class="modal-body">
+                    <form id="formsua" class="row form-group" enctype="multipart/form-data">
+                        <input id="txtid" disabled placeholder="id"
+                               class="col-md-12 m-2 form-control">
+                        <input id="txtname" placeholder="Nhập tên Laptop"
+                               class="col-md-4 m-2 form-control">
+                        <input accept="image/*" id="imagess" type="file" placeholder="Chọn file"
+                               class="col-md-7 m-2 form-control ">
+                        <img class="col-md-4 m-2 " id="txtimage" height='100' width='120' style='object-fit: cover'
+                             src="">
+                        <input id="txtprice" placeholder="Nhập tên giá "
+                               class="col-sm-7 m-2 form-control">
+                        <select id="txtbrand" class="col-md-7 m-2 form-control ">
+                            <option>Chọn nhãn hiệu</option>
+                            {% for bra in brand %}
+                                <option value="{{ bra.id }}">{{ bra.name }}</option>
+
+                            {% endfor %}
+                        </select>
+                        <input id="txtsize" type="number" placeholder="size" class="col-sm-4 m-2 form-control">
+                        <select id="txtCategory" class="col-md-7 m-2 form-control ">
+                            <option>Chọn Danh mục</option>
+                            {% for cate in category %}
+                                <option value="{{ cate.id }}">{{ cate.name }}</option>
+
+                            {% endfor %}
+                        </select>
+                        <input id="txtmaterial" placeholder="chất liệu" class="col-md-4 m-2 form-control ">
+                        <input id="txtquantity" type="number" placeholder="Số lượng"
+                               class="col-md-7 m-2 form-control">
+
+                        <textarea id="txtdescription" rows="3"
+                                  class="col-md-12 m-2 form-control"></textarea>
+                        <button type="submit" data-dismiss="modal" class="updateCate btn btn-success m-2">
+                            Cập nhật
+                        </button>
+
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {#    modal them#}
+    <div id="modalthem" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Thêm Laptop</h4>
+                </div>
+                <div class="modal-body container">
+                    <form id="formthem" class="row form-group" enctype="multipart/form-data">
+                        <input id="name" name="name" placeholder="Nhập tên Giày" class="col-md-4 m-2 form-control">
+                        <input accept="image/*" id="image" name="image" type="file" placeholder="Chọn file"
+                               class="col-md-7 m-2 form-control ">
+                        <input id="price" name="price" placeholder="Nhập tên giá " class="col-sm-4 m-2 form-control">
+                        <select id="Brand" name="Brand" class="col-md-7 m-2 form-control ">
+                            <option>Nhãn hiệu</option>
+                            {% for bra in brand %}
+                                <option value="{{ bra.id }}">{{ bra.name }}</option>
+
+                            {% endfor %}
+                        </select>
+                        <input type="number" name="size" id="size" placeholder="size" class="col-sm-4 m-2 form-control">
+                        <select name="Category" id="Category" class="col-md-7 m-2 form-control ">
+                            <option>Chọn Danh mục</option>
+                            {% for cate in category %}
+                                <option value="{{ cate.id }}">{{ cate.name }}</option>
+
+                            {% endfor %}
+                        </select>
+                        <input name="material" id="material" placeholder="material" class="col-md-4 m-2 form-control ">
+                        <input name="quantity" id="quantity" type="number" placeholder="Số lượng"
+                               class="col-md-7 m-2 form-control">
+
+                        <textarea name="description" id="description" rows="3"
+                                  class="col-md-12 m-2 form-control"></textarea>
+
+                    </form>
+                    <button type="submit" form="formthem" class="btn btnthem  btn-success m-2">Thêm
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- /.content-wrapper -->
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous"></script>
+    <script>
+        $("form#formthem").submit(function (e) {
+            e.preventDefault();
+            var formData = new FormData(this) //luu ý đặt tên các trường input phải trùng vs tên trong csdl
+            console.log(formData)
+            $.ajax({
+                url: 'http://127.0.0.1:8000/api/shoe/',
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    alo()
+                    alert('thêm thành công')
+                },
+                error: function () {
+                    alert("Thêm sản phẩm thất bại")
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
+
+        //hiên thị
+        $(document).ready(function () {
+            alo()
+        })
+
+        function alo() {
+
+            $.ajax(
+                {
+                    type: "GET",
+                    url: "http://127.0.0.1:8000/api/user/",
+                    success: function (data) {
+                        console.log(data)
+
+                        var html = ""
+                        $.each(data, function (i, index) {
+
+                                html += "<tr class='align-items-center'>"
+                                html += "<td >" + index.id + "</td>"
+                                html += "<td ><img height='100' width='120'  style='object-fit: cover' src='" + index.avatar + "'></td>"
+                                html += "<td  >" + index.username+ "</td>"
+                                html += "<td  >" + index.first_name + "</td>"
+                                html += "<td  >" + index.last_name + "</td>"
+                                html += "<td  >" + index.email + "</td>"
+                                html += "<td>  <a  data-toggle='modal' data-name='" + index.name + "' data-size='" + index.size + "' data-quantity='" + index.quantity + "' data-price='" + index.price + "' data-Category='" + index.Category + "' data-brand='" + index.Brand + "' data-material='" + index.material + "' data-id='" + index.id + "' data-image='" + index.image + "' data-description='" + index.description + "' data-target='#myModal'  class='btn btn-danger update' href=''>Cập nhật</a></td>"
+                                html += "<tr>"
+
+                            }
+                        )
+                        $('#list').html(html)
+
+                    },
+                    error: function () {
+
+                    }
+                }
+            );
+        }
+
+        {#$(document).on('click', '.del-data', function (event) {#}
+        {#    event.preventDefault()#}
+        {#    var id = $(this).data('id_xoa')#}
+        {#    let that = $(this)#}
+        {#    $.ajax(#}
+        {#        {#}
+        {#            type: "DELETE",#}
+        {#            url: "http://127.0.0.1:8000/api/shoe/" + id,#}
+        {#            data: {id: id},#}
+        {#            success: function (data) {#}
+                        {#alert("Xóa thành công")#}
+        {#                that.parent().parent().remove()#}
+        {#            },#}
+        {#            error: function () {#}
+        {##}
+        {#            }#}
+        {#        }#}
+        {#    );#}
+        {#})#}
+        //lay chi tiet
+        $(document).on('click', '.update', function () {
+            var id = $(this).data('id')
+            var material = $(this).data('material')
+            var description = $(this).data('description')
+            var quantity = $(this).data('quantity')
+            var image = $(this).data('image')
+            var Category = $(this).data('category')
+            var brand = $(this).data('brand')
+            var price = $(this).data('price')
+            var name = $(this).data('name')
+            var size = $(this).data('size')
+
+            $('#txtname').val(name)
+            $('#txtmaterial').val(material)
+            $('#txtsize').val(size)
+            $('#txtquantity').val(quantity)
+            $('#txtprice').val(price)
+            $('#txtCategory').val(Category)
+            $('#txtbrand').val(brand)
+            $('#txtdescription').val(description)
+            $('#txtimage').attr('src', image)
+            $('#txtid').val(id)
+
+        })
+        // update
+        $(document).on('click', '.updateCate', function (e) {
+                 id = $('#txtid').val()
+            e.preventDefault();
+            const data = new FormData();
+           var name=$('#txtname').val()
+            var price=$('#txtprice').val()
+            var size=$('#txtsize').val()
+            var material=$('#txtmaterial').val()
+            var quantity=$('#txtquantity').val()
+            var Category=$('#txtCategory').val()
+            var Brand=$('#txtbrand').val()
+            var description=$('#txtdescription').val()
+            var image =$('#imagess')[0].files["0"]
+            {##}
+            {#  alert(name+price+size+quantity+Category+Brand+description+material+image)#}
+
+            data.append('name', name)
+            data.append('quantity', quantity)
+            data.append('size',size)
+            data.append('Category', Category)
+            data.append('Brand',Brand)
+            data.append('description', description)
+            data.append('material', material)
+            data.append('price', price)
+            if($('#imagess').val()!=""){
+                data.append('image', image)
+            }
+
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/api/shoe/' + parseInt(id),
+                    type: 'PUT',
+                    data: data,
+                    success: function (data) {
+                        alo()
+
+                        alert('thanh cong')
+
+                    },
+                    error: function () {
+                        alert("Thêm sản phẩm thất bại")
+                    },
+                    cache: false,
+                    contentType: false,
+                    processData: false
+                });
+            }
+        )
+
+
+    </script>
+
+{% endblock %}
+

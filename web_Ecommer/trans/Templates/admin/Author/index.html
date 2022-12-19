@@ -1,0 +1,204 @@
+{% extends 'admin.html' %}
+
+{% block body %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Starter Page</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Starter Page</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class=" col-sm-12">
+                        <form class="row">
+                            <input id="name" placeholder="nhập tên tác giả" class="col-sm-4 m-2 form-control">
+                            <input id="dob" type="date" placeholder="nhập tên ngày sinh"
+                                   class="col-sm-4 m-2 form-control">
+                            <button type="submit" class="btn btnthem  btn-success m-2">Thêm</button>
+                        </form>
+                    </div>
+                    <div class="col-sm-12">
+                        <table class="table">
+                            <thead>
+                            <th>ID</th>
+                            <th>Tên tác giả</th>
+                            <th>Ngày sinh</th>
+                            <th>Thao tác</th>
+                            </thead>
+                            <tbody id="list">
+                            <tr>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content -->
+        </div>
+    </div>
+
+    </div>
+
+    </div>
+    </div>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Cập nhật tác giả</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="formSua" class="row">
+                        <label>ID:<p id="txtid"></p></label></br>
+                        <input id="txtname" placeholder="nhập tên tác giả" class="col-sm-4 m-2 form-control">
+                        <input id="txtdob" type="date" placeholder="nhập tên ngày sinh"
+                               class="col-sm-4 m-2 form-control">
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" data-dismiss="modal" form="formSua" class="updateCate btn btn-success m-2">
+                        Cập nhật
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- /.content-wrapper -->
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous"></script>
+    <script>
+        //create
+        $(document).on('click', '.btnthem', function (event) {
+            event.preventDefault()
+            var name = $('#name').val()
+            var dobs = $('#dob').val()
+            $.ajax({
+                type: 'POST',
+                url: 'http://127.0.0.1:8000/api/author/',
+                data: {name: name, dob: dobs},
+                success: function (data) {
+                    alo()
+                    {#localStorage.removeItem("user")#}
+                    {# localStorage.removeItem("access")#}
+                    {#sessionStorage.removeItem("user")#}
+
+                },
+                error: function () {
+                    alert('thêm thất bại')
+                }
+            })
+        })
+
+        $(document).ready(function () {
+            alo()
+        })
+
+        function alo() {
+
+            $.ajax(
+                {
+                    type: "GET",
+                    url: "http://127.0.0.1:8000/api/author/",
+                    success: function (data) {
+                        console.log(data)
+
+                        var html = ""
+                        $.each(data, function (i, index) {
+
+                                this.ile = index.id
+                                html += "<tr>"
+                                html += "<td id='idsss'>" + index.id + "</td>"
+                                html += "<td id='namesss'  >" + index.name + "</td>"
+                                html += "<td id='dobsss' >" + index.dob + "</td>"
+                                html += "<td><a data-id_xoa='" + index.id + "'  class='btn btn-warning del-data'  href='' > Xóa</a>  <a data-toggle='modal' data-name='" + index.name + "' data-dob='" + index.dob + "' data-id='" + index.id + "' data-target='#myModal'  class='btn btn-danger update' href=''>Cập nhật</a></td>"
+                                html += "<tr>"
+
+                            }
+                        )
+                        $('#list').html(html)
+
+                    },
+                    error: function () {
+
+                    }
+                }
+            );
+        }
+
+        $(document).on('click', '.del-data', function (event) {
+            event.preventDefault()
+            var id = $(this).data('id_xoa')
+            let that = $(this)
+            $.ajax(
+                {
+                    type: "DELETE",
+                    url: "http://127.0.0.1:8000/api/author/" + id,
+                    data: {id: id},
+                    success: function (data) {
+                        alert("Xóa thành công")
+                        that.parent().parent().remove()
+                    },
+                    error: function () {
+                        alert('Xóa thất bại')
+                    }
+                }
+            );
+        })
+        $(document).on('click', '.update', function () {
+            var id = $(this).data('id')
+            var name = $(this).data('name')
+            var dob = $(this).data('dob')
+            $('#txtname').val(name)
+            $('#txtdob').val(dob)
+            $('#txtid').html(id)
+        })
+
+        $(document).on('click', '.updateCate', function (event) {
+            event.preventDefault()
+            var id = $('#txtid').html()
+            var name = $('#txtname').val()
+            var dob = $('#txtdob').val()
+            $.ajax({
+                type: 'PUT',
+                url: "http://127.0.0.1:8000/api/author/" + parseInt(id.trim()),
+                data: {name: name, dob: dob},
+                success: function (data) {
+                    alo()
+
+                },
+                error: function () {
+                    alert('Sửa thất bại')
+                }
+            })
+        })
+
+    </script>
+
+{% endblock %}
+

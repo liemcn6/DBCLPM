@@ -1,0 +1,114 @@
+{% extends "client/base.html" %}
+{% block body %}
+    <div class="container">
+
+        <h3>Công nghệ</h3>
+        <div class="row" id="laptop">
+
+        </div>
+
+        <h3>Tri thức</h3>
+        <div class="row" id="book">
+
+        </div>
+
+        <h3>Thời trang</h3>
+        <div class="row" id="shoe">
+
+        </div>
+    </div>
+
+    </div>
+
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            alo()
+            function alo() {
+                $.ajax({
+                    type: "GET",
+                    url: "http://127.0.0.1:8000/api/laptop/",
+                    success: function (data) {
+                        var html = "";
+                        $.each(data, function (i, index) {
+                            html += "<div class='col-sm-3 my-3 py-3'  style='height: 50%'>"
+                            html += "    <div class='card'>"
+                            html += "    <img src='" + index.image + "' width='100%' style='object-fit: cover' height='250px'>"
+                            html += " <div class='card-body'>"
+                            html += " <h5 class='card-title'>" + index.name + "</h5>"
+                            html += " <p class='card-text'>" + index.price + " VND</p>"
+                            html += " <a href='product/" + index.id + "' class='btn btn-primary'>Xem chi tiết</a>"
+                            html += " </div>"
+                            html += " </div>"
+                            html += " </div>"
+
+
+                        })
+                        $('#laptop').html(html)
+                    },
+                    error: function (data) {
+
+                    }
+                })
+
+                $.ajax({
+                    type: "GET",
+                    url: "http://127.0.0.1:8000/api/book/",
+                    success: function (data) {
+                        var html = "";
+                        $.each(data, function (i, index) {
+                            html += "<div class='col-sm-3 my-3 py-3'  style='height: 50%'>"
+                            html += "    <div class='card'>"
+                            html += "    <img src='" + index.image + "' width='100%' style='object-fit: cover' height='250px'>"
+                            html += " <div class='card-body'>"
+                            html += " <h5 class='card-title'>" + index.name + "</h5>"
+                            html += " <p class='card-text'>" + index.price + " VND</p>"
+                            html += " <a href='product/" + index.id + "' class='btn btn-primary'>Xem chi tiết</a>"
+                            html += " </div>"
+                            html += " </div>"
+                            html += " </div>"
+
+
+                        })
+                        $('#book').html(html)
+                    },
+                    error: function (data) {
+
+                    }
+                })
+
+                $.ajax({
+                    type: "GET",
+                    url: "http://127.0.0.1:8000/api/shoe/",
+                    success: function (data) {
+                        var html = "";
+                        $.each(data, function (i, index) {
+                            html += "<div class='col-sm-3 my-3 py-3'  style='height: 50%'>"
+                            html += "    <div class='card'>"
+                            html += "    <img src='" + index.image + "' width='100%' style='object-fit: cover' height='250px'>"
+                            html += " <div class='card-body'>"
+                            html += " <h5 class='card-title'>" + index.name + "</h5>"
+                            html += " <p class='card-text'>" + index.price + " VND</p>"
+                            html += " <a href='product/" + index.id + "' class='btn btn-primary'>Xem chi tiết</a>"
+                            html += " </div>"
+                            html += " </div>"
+                            html += " </div>"
+
+
+                        })
+                        $('#shoe').html(html)
+                    },
+                    error: function (data) {
+
+                    }
+                })
+            }
+        })
+    </script>
+
+
+
+{% endblock %}

@@ -1,0 +1,167 @@
+{% extends 'client/base.html' %}
+
+{% block body %}
+    <style>
+
+.modal-dialog {
+    max-width: 1000px !important;
+    margin: 1.75rem auto;
+}
+    </style>
+    <div class="container">
+        <h4 class="mt-4">
+            Đơn hàng của bạn!
+        </h4>
+        <div class="row mt-5 ">
+            <div class="col-sm-12 ">
+                <div class="row">
+                    <table class="table table-bordered">
+                        <thead>
+                        <th>STT</th>
+                        <th>Mã đơn hàng</th>
+                        <th>Họ và tên</th>
+                        <th>Ngày đặt</th>
+                        <th>Địa chỉ</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                        </thead>
+                        <tbody id="listorder">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    </div>
+
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered w-100 p-3" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body container">
+                    <div class="row mt-5 ">
+                        <div class="col-sm-12" id="listCart">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $(document).ready(function () {
+            var user = {{ user.id }}
+                loadOrder()
+
+            function loadOrder() {
+                if (user) {
+                    $.ajax({
+                        type: 'GET',
+                        url: "http://127.0.0.1:8000/api/order/?q=" + user,
+                        success: function (data) {
+
+                            if (data != "") {
+                                var total = 0
+                                var html = ""
+                                var status = ""
+                                $.each(data, function (i, index) {
+                                    if (index.status == 0) {
+                                        status = "<span class='text-danger'>chờ phê duyêt</span>"
+                                    }
+                                    if (index.status == 1) {
+                                        status = "<span class='text-warning'>Đang giao</span>"
+                                    }
+                                    if (index.status == 2) {
+                                        status = "<span class='text-success'>thành công</span>"
+                                    }
+                                    html += "   <tr>"
+                                    html += "   <td>" + index.id + "</td>"
+                                    html += "   <td>" + index.code + "</td>"
+                                    html += "   <td>" + index.username + "</td>"
+                                    html += "  <td>" + index.date + "</td>"
+                                    html += "   <td>" + index.address + "</td>"
+                                    html += "  <td><span>" + index.total.toLocaleString('it-IT', {
+                                        style: 'currency',
+                                        currency: 'VND'
+                                    }) + "</span> VNĐ</td>"
+                                    html += "   <td>" + status + "</td>"
+                                    html += "  <td><span><a href='' class='btn btn-success vieworderitem' data-toggle='modal' data-code=" + index.code + " data-target='#exampleModalCenter'>Xem</a></span> </td>"
+                                    html += "<tr>"
+
+                                })
+                            } else {
+
+                            }
+                            $('#listorder').html(html)
+                            $('#total').html(total)
+
+                        },
+                        error: function () {
+
+                        }
+                    })
+                }
+            }
+
+            $(document).on('click', '.vieworderitem', function (e) {
+                e.preventDefault()
+                var code = $(this).data('code')
+                $.ajax({
+                    type: 'GET',
+                    url: "http://127.0.0.1:8000/api/orderitem/?q=" + code,
+                    success: function (data) {
+
+                        var html = ""
+                        if (data != "") {
+                            var total = 0
+                            $.each(data, function (i, index) {
+                                total += (index.quantity * index.Product.price)
+                                html += " <div style='min-height: 100px' class='col-sm-12 row border-bottom mt-3 mb-3 '>"
+                                html += "  <div class='col-sm-3'>"
+                                html += "    <img src='" + index.Product.image + "' height='120px' width='100%' style='object-fit: cover'>"
+                                html += "  </div>"
+                                html += "  <div class='col-sm-3'>"
+                                html += "   <p>" + index.Product.name + "</p>"
+                                html += "  </div>"
+                                html += "  <div class='col-sm-2'>"
+                                html += "      <input disabled style='width: 100%;border: none' type='number' id='quan' value='" + index.quantity + "' min='1'>"
+                                html += " </div>"
+                                html += " <div class='col-sm-3'>"
+                                html += "     <p>" + (index.quantity * index.Product.price) + " </p>"
+                                html += "  </div>"
+                                html += "  <div class='col-sm-1'>"
+                                html += "   </div>"
+                                html += "  </div>"
+                            })
+                        } else {
+
+                        }
+                        $('#listCart').html(html)
+                        $('#total').html(total.toLocaleString('it-IT', {style: 'currency', currency: 'VND'}))
+
+                    },
+                    error: function () {
+                    }
+                })
+            })
+
+
+        })
+    </script>
+{% endblock %}

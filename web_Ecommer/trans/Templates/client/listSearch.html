@@ -1,0 +1,24 @@
+{% extends "client/base.html" %}
+{% block body %}
+    <div class="container">
+
+        <h3>Danh sácḥ sản phẩm</h3>
+        <div class="row">
+            {% for pro in product %}
+                <div class='col-sm-3 my-3 py-3' style='height: 50%'>
+                    <div class='card'>
+                        <img src='http://127.0.0.1:8000/trans/media/{{ pro.image }}' width='100%' style='object-fit: cover' height='250px'>
+                        <div class='card-body'>
+                            <h5 class='card-title'>{{ pro.name }}</h5>
+                            <p class='card-text'>{{ pro.price }}</p>
+                            <a href='/product/{{ pro.id }}' class='btn btn-primary'>Xem chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+
+{% endblock %}

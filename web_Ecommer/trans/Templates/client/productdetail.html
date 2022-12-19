@@ -1,0 +1,166 @@
+{% extends 'client/base.html' %}
+{% block body %}
+    <div class="container">
+        <h3 class="mt-3">Chi tiết sản phẩm</h3>
+        <div>
+            <a href="/">
+                <button class="btn btn-dark">Back</button>
+            </a>
+        </div>
+        <div class="row my-3 py-3">
+            {% for pro in product %}
+                <div class="col-sm-4">
+                    <img width="100%" src="http://127.0.0.1:8000/trans/media/{{ pro.image }}">
+                </div>
+                <div id="product" class="col-sm-4">
+                </div>
+                <div class="col-sm-4 card " style="max-height: 250px">
+                    <p class="mt-4">Giá trên 1 sản phẩm: {{ pro.price }}</p>
+                    <div class="form-group">
+                        <label>Số lượng</label>
+                        <select id='select' class="form-control">
+                        </select>
+                    </div>
+                    <a class="text-center">
+                        <button class="btn btn-dark btnAdd ">Thêm vào giỏ hàng</button>
+                    </a>
+                </div>
+
+
+
+
+
+                <script
+                        src="https://code.jquery.com/jquery-3.6.0.js"
+                        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+                        crossorigin="anonymous"></script>
+                <script>
+                    $(document).ready(function () {
+                        alo()
+{#function alo()  dùng để lấy list product#}
+                        function alo() {
+                            $.ajax({
+                                type: "GET",
+                                url: "http://127.0.0.1:8000/api/laptop/" +{{ pro.id }},
+                                success: function (data) {
+                                    var html = "";
+                                    if (data != "") {
+
+                                        html += "<h5 class='card-title'>Tên sản phẩm: " + data.name + " </h5>"
+                                        html += "<p class='card-text'>Mô tả: " + data.description + "</p>"
+                                        html += "<p class='card-text'>Số lượng: " + data.quantity + "</p>"
+                                        html += "<p class='card-text'>Nhà sản xuất: " + data.producer + "</p>"
+                                        html += "<p class='card-text'>Ram: " + data.ram + "</p>"
+                                        html += "<p class='card-text'>CPU: " + data.cpu + "</p>"
+                                        html += "<p class='card-text'>Giá:  " + data.price.toLocaleString('it-IT', {style : 'currency', currency : 'VND'}); + " VNĐ</p>"
+
+                                        $('#product').html(html)
+                                    }
+
+
+                                },
+                                error: function (data) {
+
+                                }
+                            })
+
+                            $.ajax({
+                                type: "GET",
+                                url: "http://127.0.0.1:8000/api/book/" +{{ pro.id }},
+                                success: function (data) {
+                                    var html = "";
+                                    if (data != "") {
+
+                                        html += "<h5 class='card-title'>Tên sản phẩm: " + data.name + " </h5>"
+                                        html += "<p class='card-text'>Mô tả: " + data.description + "</p>"
+                                        html += "<p class='card-text'>Số lượng: " + data.quantity + "</p>"
+                                        html += "<p class='card-text'>Ngày xuất bản: " + data.year + "</p>"
+                                        html += "<p class='card-text'>Tác giả: " + data.author + "</p>"
+                                        html += "<p class='card-text'>Nhà xuất bản: " + data.publisher + "</p>"
+                                        html += "<p class='card-text'>Giá:  " + data.price + " </p>"
+
+                                        $('#product').html(html)
+                                    }
+
+
+                                },
+                                error: function (data) {
+
+                                }
+                            })
+
+                            $.ajax({
+                                type: "GET",
+                                url: "http://127.0.0.1:8000/api/laptop/" +{{ pro.id }},
+                                success: function (data) {
+                                    var html = "";
+                                    if (data != "") {
+
+                                        html += "<h5 class='card-title'>Tên sản phẩm: " + data.name + " </h5>"
+                                        html += "<p class='card-text'>Mô tả: " + data.description + "</p>"
+                                        html += "<p class='card-text'>Số lượng: " + data.quantity + "</p>"
+                                        html += "<p class='card-text'>Nhà sản xuất: " + data.producer + "</p>"
+                                        html += "<p class='card-text'>Ram: " + data.ram + "</p>"
+                                        html += "<p class='card-text'>CPU: " + data.cpu + "</p>"
+                                        html += "<p class='card-text'>Giá:  " + data.price.toLocaleString('it-IT', {style : 'currency', currency : 'VND'}); + " </p>"
+
+                                        $('#product').html(html)
+                                    }
+
+
+                                },
+                                error: function (data) {
+
+                                }
+                            })
+
+                        }
+
+                        var option = "";
+                        [...Array({{ pro.quantity }}).keys()].map((x) => (
+                            option += "<option value='" + (x + 1) + "' >" + (x + 1) + "</option>"
+                        ))
+                        $('#select').html(option)
+
+
+                    })
+                    {#khi nut them gio hang được ấn thì thêm sản phẩm vào giỏ và lấy ra số cartitem để hiển thị trên header, #}
+{#                        nếu ko co thi sẽ bị lỗi kiểu thêm vào 9 r chỉ hiển thi 8 cartitem#}
+
+                    $(document).on('click', '.btnAdd', function (e) {
+                        e.preventDefault()
+                        var cart = localStorage.getItem('idcart')
+                        var product =
+                        {{ pro.id }}
+                        var quantity = $('#select').val()
+                        $.ajax({
+                            type: 'POST',
+                            url: "http://127.0.0.1:8000/api/cartitem/",
+                            data: {Cart: cart, Product: product, quantity: quantity},
+                            success: function (data) {
+                            },
+                            error: function () {
+                                alert('Thêm thất bại')
+                            }
+                        })
+                        var card = localStorage.getItem('idcart')
+                        $.ajax({
+                            type: 'GET',
+                            url: "http://127.0.0.1:8000/api/cartitem/?q=" + card,
+                            success: function (data) {
+                                $('#numberCart').html(data.length)
+                            },
+                            error: function () {
+                                alert('Thêm thất bại')
+                            }
+                        })
+                    })
+
+
+                </script>
+            {% endfor %}
+
+        </div>
+    </div>
+
+{% endblock %}

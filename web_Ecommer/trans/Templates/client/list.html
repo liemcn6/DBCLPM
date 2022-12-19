@@ -1,0 +1,50 @@
+{% extends "client/base.html" %}
+{% block body %}
+    <div class="container">
+
+        <h3>Danh sách sản phẩm</h3>
+        <div class="row" id="laptop">
+            {% for books in book %}
+            <div class='col-sm-3 my-3 py-3' style='height: 50%'>
+                <div class='card'>
+                    <img src='http://127.0.0.1:8000/trans/media/{{ books.image }}' width='100%' style='object-fit: cover' height='250px'>
+                    <div class='card-body'>
+                        <h5 class='card-title'>{{books.name}}</h5>
+                        <p class='card-text'>{{books.price}} VND</p>
+                        <a href='/product/{{ books.id }}' class='btn btn-primary'>Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+    {% endfor %}
+
+                    {% for books in laptop %}
+            <div class='col-sm-3 my-3 py-3' style='height: 50%'>
+                <div class='card'>
+                    <img src='http://127.0.0.1:8000/trans/media/{{ books.image }}' width='100%' style='object-fit: cover' height='250px'>
+                    <div class='card-body'>
+                        <h5 class='card-title'>{{books.name}}</h5>
+                        <p class='card-text'>{{books.price}} VND</p>
+                        <a href='/product/{{ books.id }}' class='btn btn-primary'>Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+    {% endfor %}
+
+                    {% for books in shoe %}
+            <div class='col-sm-3 my-3 py-3' style='height: 50%'>
+                <div class='card'>
+                    <img src='http://127.0.0.1:8000/trans/media/{{ books.image }}' width='100%' style='object-fit: cover' height='250px'>
+                    <div class='card-body'>
+                        <h5 class='card-title'>{{books.name}}</h5>
+                        <p class='card-text'>{{books.price}} VND</p>
+                        <a href='/product/{{ books.id }}' class='btn btn-primary'>Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+    {% endfor %}
+
+        </div>
+
+
+    </div>
+{% endblock %}
